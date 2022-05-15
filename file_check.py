@@ -20,8 +20,18 @@ def save_config():
     # 获取text_path文本框内容
     input_value = text_path.get(0.0, tkinter.END)
     # 保存用户配置文件
-    with open(os.path.expanduser('~') + '\\Documents\\' + '文件名称统计配置.ini', 'w') as f:
-        f.write(input_value)
+    file_name = os.path.expanduser('~') + '\\Documents\\' + '文件名称统计配置.ini'
+    dir_name = os.path.expanduser('~') + '\\Documents\\'
+    # 判断文件夹是否存在，如果不存在，则写本地
+    if os.path.exists(dir_name):
+    #检查file_name文件是否存在
+    # if os.path.exists(file_name):
+        with open(os.path.expanduser('~') + '\\Documents\\' + '文件名称统计配置.ini', 'w') as f:
+            f.write(input_value)
+    else:
+        with open('file_name.ini', 'w') as f:
+            f.write(input_value)
+
 
 
 def count_file():
@@ -85,15 +95,18 @@ text_path.insert(0.0, '')
 
 
 # 判断用户配置文件是否存在
-if os.path.exists(os.path.expanduser('~') + '\\Documents\\' + '文件名称统计配置.ini'):
+file_name = os.path.expanduser('~') + '\\Documents\\' + '文件名称统计配置.ini'
+if os.path.exists(file_name):
     # 读取用户配置文件
     with open(os.path.expanduser('~') + '\\Documents\\' + '文件名称统计配置.ini', 'r') as f:
         # 将path值赋值给text_path文本框
         text_path.delete(0.0, tkinter.END)
         text_path.insert(0.0, f.read())
-
-# 判断text_path文本框内容是否为空，如果为空，则显示“请输入文件夹中文件所包含的名称”
-if text_path.get(0.0, tkinter.END).isspace() == True:
+elif os.path.exists("file_name.ini"):
+    with open("file_name.ini", 'r') as f:
+        text_path.delete(0.0, tkinter.END)
+        text_path.insert(0.0, f.read())
+else:
     # 设置text_path文本框文字大小为4倍
     text_path.tag_config('big', font=('微软雅黑', 20, 'bold'))
     # 将“请输入文件夹中文件所包含的名称”赋值给text_path文本框
